@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--These are the core styles for the text-->
+    <style name="Text" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+<!--Heading Text-->
+    <style name="Text.Heading">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.Heading.Heading1">
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="Text.Heading.Heading2">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="Text.Heading.Heading3">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Text.Heading.Heading4">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+<!--Paragraph Text-->
+    <style name="Text.Paragraph">
+
+    </style>
+
+    <style name="Text.Paragraph.Paragraph1">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="Text.Paragraph.Paragraph2">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Text.Paragraph.Paragraph3">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Text.Paragraph.Paragraph3.Light">
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+</resources>

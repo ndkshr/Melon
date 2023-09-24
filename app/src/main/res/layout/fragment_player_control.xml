@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/time_gone"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/seek_bar"
+            app:layout_constraintBottom_toBottomOf="@id/seek_bar"
+            app:layout_constraintEnd_toStartOf="@id/seek_bar"
+            android:layout_width="wrap_content"
+            android:text="00:00"
+            tools:text="00:00"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:progressTint="@color/flame"
+            android:thumbTint="?attr/colorPrimaryVariant"
+            android:layout_width="0dp"
+            tools:progress="50"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toStartOf="@id/total_duration"
+            app:layout_constraintStart_toEndOf="@id/time_gone"
+            app:layout_constraintTop_toBottomOf="@id/artist" />
+
+        <TextView
+            android:id="@+id/total_duration"
+            app:layout_constraintTop_toTopOf="@id/seek_bar"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/seek_bar"
+            app:layout_constraintStart_toEndOf="@id/seek_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="00:00"
+            tools:text="00:00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/artist"
+            style="@style/Text.Paragraph.Paragraph3.Light"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="@id/album_art_card"
+            app:layout_constraintStart_toStartOf="@id/album_art_card"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="Name of the artist" />
+
+        <TextView
+            android:id="@+id/title"
+            android:gravity="center"
+            style="@style/Text.Heading.Heading2"
+            android:layout_width="0dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@id/album_art_card"
+            app:layout_constraintStart_toStartOf="@id/album_art_card"
+            app:layout_constraintTop_toBottomOf="@id/album_art_card"
+            tools:text="Name of the song" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/album_art_card"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_margin="50dp"
+            app:cardElevation="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/album_art"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher_melon" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:src="@drawable/ic_next"
+            app:layout_constraintBottom_toBottomOf="@id/play_or_pause"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:foregroundGravity="center"
+            app:layout_constraintTop_toTopOf="@id/play_or_pause" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play_or_pause"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_play"
+            app:fabCustomSize="80dp"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seek_bar" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_previous"
+            app:layout_constraintBottom_toBottomOf="@id/play_or_pause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/play_or_pause" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
