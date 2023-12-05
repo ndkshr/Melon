@@ -13,7 +13,8 @@ class DescriptionAdapter: MediaDescriptionAdapter {
 
     override fun createCurrentContentIntent(player: Player): PendingIntent? {
 
-        val openAppIntent = Intent()
+//        val openAppIntent = Intent()
+        return null;
     }
 
     override fun getCurrentContentText(player: Player): CharSequence? {

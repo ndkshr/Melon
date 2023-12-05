@@ -8,9 +8,9 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -23,8 +23,9 @@ import me.ndkshr.melon.ViewModelFactory
 import me.ndkshr.melon.databinding.FragmentPlayerControlBinding
 import me.ndkshr.melon.model.AudioDetails
 import me.ndkshr.melon.viewmodel.MainActivityViewModel
+import me.ndkshr.melon.worker.SingerTTS
 
-private const val TAG = "PlayerBottomSheetFragment"
+private const val TAG = "PlayerBSFragment"
 
 class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
 
@@ -32,6 +33,7 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
     private lateinit var dialog: BottomSheetDialog
     private lateinit var audioDetails: AudioDetails
     private val exoPlayer by lazy { ExoPlayer.Builder(requireActivity()).build() }
+    private val tts by lazy { SingerTTS(requireActivity()) }
 
     private val viewModelFactory = ViewModelFactory()
     private val viewModel by lazy {
@@ -56,6 +58,22 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
             setupMediaAudio()
         }
 
+        setupSeekBarListener()
+    }
+
+    private fun setupSeekBarListener() {
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+            override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
+            }
+
+            override fun onStartTrackingTouch(bar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(bar: SeekBar?) {
+                exoPlayer.seekTo(binding.seekBar.progress.toLong())
+            }
+        })
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -67,6 +85,8 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        exoPlayer.stop()
+        tts.destroy()
         super.onDismiss(dialog)
         // show the mini player
     }
@@ -137,6 +157,11 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
                 if (playbackState == ExoPlayer.STATE_READY) {
                     resetPlayerProgress()
                     updatePlayerPositionProgress()
+
+                    if (audioDetails.hasLyrics()) {
+                        tts.sing(audioDetails.getLyrics(requireActivity()))
+                    }
+
                 } else if (playbackState == ExoPlayer.STATE_ENDED) {
                     binding.seekBar.progress = 0
                 }
@@ -180,7 +205,7 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun playCurrentSong(fm: FragmentManager?) {
+        fun playCurrentSong(fm: FragmentManager?, lyrics: List<String> = emptyList()) {
             val fragment = PlayerBottomSheetFragment()
             fragment.show(fm!!, TAG)
         }

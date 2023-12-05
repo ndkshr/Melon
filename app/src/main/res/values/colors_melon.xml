@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="xiketic">#050517</color>
+    <color name="grey">#4D4D50</color>
+    <color name="dar_grey">#323239</color>
     <color name="flame">#cf5c36</color>
     <color name="gold_crayola">#efc88b</color>
     <color name="banana_mania">#f4e3b2</color>
     <color name="light_gray">#d3d5d7</color>
     <color name="melon_white">#FFEDED</color>
     <color name="fogra_black">#1C121B</color>
-
+    <color name="mint">#4fb477</color>
+    <color name="pistah_green">#74EBA3</color>
     <color name="rajah">#fcab64</color>
     <color name="deep_champagne">#fcd29f</color>
 </resources>
