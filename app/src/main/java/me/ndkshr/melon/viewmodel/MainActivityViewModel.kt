@@ -33,12 +33,13 @@ class MainActivityViewModel(): ViewModel() {
     fun isFirstSong() = currentSongPosition.value == 0
     fun isLastSong() = currentSongPosition.value == songsList.size - 1
 
-    fun generateSongFromGooey(fileTitle: String, prompt: String, lyrics: String) = viewModelScope
+    fun generateSongFromGooey(fileTitle: String, prompt: String, duration: Int = 20) =
+        viewModelScope
         .launch {
         withContext(Dispatchers.IO) {
             try {
                 val response = gooeyAPI.gooeyFetchSong(
-                    GooeySongRequest(testPrompt = prompt)
+                    GooeySongRequest(testPrompt = prompt, duration)
                 )
 
                 if (response.isSuccessful) {

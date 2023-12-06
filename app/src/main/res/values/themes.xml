@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Melon" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Melon" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/flame</item>
         <item name="colorPrimaryVariant">@color/rajah</item>
@@ -16,5 +16,13 @@
     </style>
     <style name="CardView.Dark">
         <item name="android:backgroundTint">?attr/colorSecondary</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--        <item name="colorPrimary">@color/color_primary</item>-->
+        <!--        <item name="colorPrimaryDark">@color/color_secondary</item>-->
+        <!--        <item name="colorAccent">@color/color_accent</item>-->
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 </resources>

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.slider.RangeSlider
 import me.ndkshr.melon.R
 import me.ndkshr.melon.ViewModelFactory
 import me.ndkshr.melon.databinding.FragmentGenerateSongBottomSheetBinding
@@ -39,13 +40,15 @@ class GenerateSongBottomSheet: BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.slider.values = listOf(20f)
+
         viewModel.currentGeneratedLyrics.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 binding.loadingTv.text = "Generating music..."
                 viewModel.generateSongFromGooey(
                     binding.titleInput.text.toString(),
                     binding.promptInput.text.toString(),
-                    it
+                    binding.slider.values[0].toInt()
                 )
             }
         }
@@ -62,7 +65,7 @@ class GenerateSongBottomSheet: BottomSheetDialogFragment() {
                     viewModel.generateSongFromGooey(
                         binding.titleInput.text.toString(),
                         binding.promptInput.text.toString(),
-                        lyrics
+                        binding.slider.values[0].toInt()
                     )
                 }
 
@@ -94,6 +97,10 @@ class GenerateSongBottomSheet: BottomSheetDialogFragment() {
             binding.noLyrics.setTextColor(requireActivity().getColor(R.color.mint))
             binding.withLyrics.setTextColor(requireActivity().getColor(R.color.white))
             binding.withLyrics.setBackgroundColor(requireActivity().getColor(R.color.mint))
+        }
+
+        binding.slider.addOnChangeListener {slider, value,fromUser ->
+            binding.labelSlider.text = "Duration in sec: ${slider.values[0].toInt()}"
         }
     }
 

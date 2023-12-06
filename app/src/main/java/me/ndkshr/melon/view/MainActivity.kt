@@ -1,11 +1,12 @@
 package me.ndkshr.melon.view
 
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import me.ndkshr.melon.R
@@ -18,6 +19,7 @@ import me.ndkshr.melon.worker.GooeySongDownloadManager
 import me.ndkshr.melon.worker.LYRIC_DELIM
 import me.ndkshr.melon.worker.TITLE_DELIM
 import java.util.UUID
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         downloader = GooeySongDownloadManager(this)
 
         attachLiveData()
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
     }
 
     private fun initViews() {

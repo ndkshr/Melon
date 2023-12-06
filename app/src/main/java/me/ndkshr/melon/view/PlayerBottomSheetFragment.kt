@@ -99,6 +99,12 @@ class PlayerBottomSheetFragment() : BottomSheetDialogFragment() {
             title.text = audioDetails.title ?: "Unknown"
         }
 
+        if (audioDetails.isGenerated()) {
+            binding.albumArt.setImageResource(R.mipmap.ic_green_melon_new)
+        } else {
+            binding.albumArt.setImageResource(R.mipmap.ic_launcher_melon)
+        }
+
         val mediaItem = MediaItem.fromUri(Uri.parse(audioDetails.path))
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.prepare()
