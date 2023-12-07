@@ -61,6 +61,11 @@ class MainActivity : AppCompatActivity() {
         binding.generateSongButton.setOnClickListener {
             generateSongBottomSheet.show(supportFragmentManager, "GenerateSongFragment")
         }
+
+        binding.appBarParent.setOnClickListener {
+            val fragment = KeysSaveBottomSheet()
+            fragment.show(supportFragmentManager, "KeysFragment")
+        }
     }
 
     private fun setUpSongsFragment() {

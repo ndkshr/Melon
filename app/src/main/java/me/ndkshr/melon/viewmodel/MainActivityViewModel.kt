@@ -1,5 +1,6 @@
 package me.ndkshr.melon.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +15,8 @@ import me.ndkshr.melon.worker.gooeyAPI
 import me.ndkshr.melon.worker.GooeySongRequest
 import me.ndkshr.melon.worker.GooeySongResponse
 import me.ndkshr.melon.worker.LYRIC_DELIM
-import me.ndkshr.melon.worker.OPEN_AI_AUTH_KEY
+import me.ndkshr.melon.worker.getGooeyAuthKey
+import me.ndkshr.melon.worker.getOpenAIAuthKey
 import me.ndkshr.melon.worker.openAIAPI
 import java.net.SocketTimeoutException
 
@@ -33,21 +35,20 @@ class MainActivityViewModel(): ViewModel() {
     fun isFirstSong() = currentSongPosition.value == 0
     fun isLastSong() = currentSongPosition.value == songsList.size - 1
 
-    fun generateSongFromGooey(fileTitle: String, prompt: String, duration: Int = 20) =
+    fun generateSongFromGooey(fileTitle: String, prompt: String, duration: Int = 20, context: Context) =
         viewModelScope
         .launch {
         withContext(Dispatchers.IO) {
             try {
                 val response = gooeyAPI.gooeyFetchSong(
-                    GooeySongRequest(testPrompt = prompt, duration)
+                    GooeySongRequest(testPrompt = prompt, duration = duration),
+                    key = "Bearer " + getGooeyAuthKey(context)
                 )
 
                 if (response.isSuccessful) {
                     val gooeyResponse = response.body()
                     if (gooeyResponse != null) {
                         gooeyResponse.title = fileTitle
-
-//                    currentGeneratedLyrics = lyrics
 
                         gooeyResponseLiveData.postValue(gooeyResponse)
                     }
@@ -63,7 +64,7 @@ class MainActivityViewModel(): ViewModel() {
         }
     }
 
-    fun generateLyricsFromOpenAi(prompt: String) = viewModelScope.launch {
+    fun generateLyricsFromOpenAi(prompt: String, context: Context) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
 
             try {
@@ -81,7 +82,7 @@ class MainActivityViewModel(): ViewModel() {
                 body.add("messages", messageArray)
 
                 val response = openAIAPI.fetchLyrics(
-                    OPEN_AI_AUTH_KEY,
+                    authKey = "Bearer " + getOpenAIAuthKey(context),
                     "application/json",
                     body
                 )

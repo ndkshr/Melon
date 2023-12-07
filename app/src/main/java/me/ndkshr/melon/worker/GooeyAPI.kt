@@ -10,9 +10,9 @@ interface GooeyAPI {
     @POST("text2audio/")
     suspend fun gooeyFetchSong(
         @Body body: GooeySongRequest,
+        @Header("Authorization") key: String,
         @Query("run_id") runId: String = RUN_ID,
         @Query("uid") uid: String = UID,
-        @Header("Authorization") key: String = GOOEY_BEARER_KEY,
         @Header("Content-Type") mimeType: String = "application/json"
     ): Response<GooeySongResponse>
 }

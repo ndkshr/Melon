@@ -48,24 +48,24 @@ class GenerateSongBottomSheet: BottomSheetDialogFragment() {
                 viewModel.generateSongFromGooey(
                     binding.titleInput.text.toString(),
                     binding.promptInput.text.toString(),
-                    binding.slider.values[0].toInt()
+                    binding.slider.values[0].toInt(),
+                    requireActivity()
                 )
             }
         }
 
         binding.generateButton.setOnClickListener {
             if (binding.promptInput.text?.isNotEmpty() == true && binding.titleInput.text?.isNotEmpty() == true) {
-                var lyrics = ""
                 if (selected == LyricModelType.WITH_LYRIC) {
-                    lyrics = "happy birthday to you,#happy birthday to you#happy birthday to Nandu"
                     binding.loadingTv.text = "Generating lyrics..."
-                    viewModel.generateLyricsFromOpenAi(binding.titleInput.text.toString())
+                    viewModel.generateLyricsFromOpenAi(binding.promptInput.text.toString(), requireActivity())
                 } else {
                     binding.loadingTv.text = "Generating music..."
                     viewModel.generateSongFromGooey(
                         binding.titleInput.text.toString(),
                         binding.promptInput.text.toString(),
-                        binding.slider.values[0].toInt()
+                        binding.slider.values[0].toInt(),
+                        requireContext()
                     )
                 }
 

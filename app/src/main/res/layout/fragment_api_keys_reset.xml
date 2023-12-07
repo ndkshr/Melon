@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:background="@color/extra_dark_grey"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:layout_width="60dp"
+            android:layout_height="4dp" />
+
+        <TextView
+            android:text="OpenAI Keys"
+            style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/openai_parent"
+            android:hint="Open AI Key"
+            app:hintTextColor="@color/mint"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/openai_edit_text"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:text="Save Open AI Key"
+            android:textAllCaps="false"
+            android:textColor="@color/extra_dark_grey"
+            android:backgroundTint="@color/mint"
+            android:id="@+id/save_openai_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:background="@color/grey"
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+
+        <TextView
+            android:text="Gooey Keys"
+            style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gooey_parent"
+            android:layout_marginTop="10dp"
+            app:hintTextColor="@color/mint"
+            android:hint="Gooey Key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/gooey_edit_text"
+                android:textColor="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:text="Save Gooey Keys"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/mint"
+            android:textColor="@color/extra_dark_grey"
+            android:id="@+id/save_gooey_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</layout>
