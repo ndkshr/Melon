@@ -1,46 +1,150 @@
 package me.ndkshr.melon.worker
 
-import android.content.Context
+import android.app.Notification
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Intent
-import android.media.session.MediaSession
-import androidx.annotation.MainThread
-import androidx.lifecycle.LifecycleService
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.media.MediaSession2
+import android.media.MediaSession2Service
+import android.net.Uri
+import android.os.Binder
+import android.os.IBinder
+import android.widget.ImageView
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.audio.AudioAttributes
+import com.google.android.exoplayer2.ui.DefaultMediaDescriptionAdapter
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
-import me.ndkshr.melon.model.AudioDetails
+import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter
+import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationListener
+import com.google.android.exoplayer2.util.NotificationUtil.IMPORTANCE_HIGH
+import me.ndkshr.melon.R
+import me.ndkshr.melon.view.MainActivity
 
-class PlayerForegroundService: LifecycleService() {
-    // TODO: Move the exoplayer here - declaration
-    var player: ExoPlayer? = null
-    var currentAudioDetails: AudioDetails? = null
-    var playerNotificationManager: PlayerNotificationManager? = null
-    var mediaSession: MediaSession? = null
-    var mediaSessionConnector: MediaSessionConnector? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        // Create the player instance
-        player = ExoPlayer.Builder(this).build()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        player?.stop()
-        player?.release()
+class PlayerForegroundService: Service() {
+    enum class Actions {
+        PLAY, PAUSE, STOP, NEXT, PREV
     }
 
     companion object {
-        private const val PLAYBACK_CHANNEL_ID = "playback_channel"
-        private const val PLAYBACK_NOTIFICATION_ID = 1
-        private const val ARG_AUDIO_DETAILS = "ARG_AUDIO_DETAILS"
+        const val CHANNEL_ID = "melon_channel"
+        const val NOTIFICATION_ID = 1003
+    }
 
-        @MainThread
-        fun newIntent(context: Context, audioDetails: AudioDetails) = Intent(
-            context,
-            PlayerForegroundService::class.java
-        ).apply {
-            putExtra(ARG_AUDIO_DETAILS, audioDetails)
+    private val mediaSession by lazy { MediaSession2.Builder(this).build() }
+    private var exoPlayer:ExoPlayer? = null
+
+    private var playerNotificationManager: PlayerNotificationManager? = null
+
+    inner class ServiceBinder: Binder() {
+        fun getPlayerService(): PlayerForegroundService {
+            return this@PlayerForegroundService
         }
+    }
+
+    override fun onBind(p0: Intent?): IBinder? {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        val audioAttr: AudioAttributes = AudioAttributes.Builder()
+            .setUsage(C.USAGE_MEDIA)
+            .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+            .build()
+
+        exoPlayer = ExoPlayer.Builder(this).build()
+        exoPlayer?.setAudioAttributes(audioAttr, true)
+
+        playerNotificationManager = PlayerNotificationManager.Builder(this, NOTIFICATION_ID, CHANNEL_ID)
+            .setNotificationListener(notificationListener)
+            .setMediaDescriptionAdapter(descriptionAdapter)
+            .setChannelImportance(IMPORTANCE_HIGH)
+            .setSmallIconResourceId(R.mipmap.ic_launcher_melon_round)
+            .setChannelDescriptionResourceId(R.string.app_name)
+            .setNextActionIconResourceId(R.drawable.ic_next)
+            .setPreviousActionIconResourceId(R.drawable.ic_previous)
+            .setPauseActionIconResourceId(R.drawable.ic_pause)
+            .setPlayActionIconResourceId(R.drawable.ic_play)
+            .setChannelNameResourceId(R.string.app_name)
+            .build()
+
+        playerNotificationManager!!.setPlayer(exoPlayer)
+        playerNotificationManager!!.setPriority(NotificationCompat.PRIORITY_MAX)
+        playerNotificationManager!!.setUseRewindAction(false)
+        playerNotificationManager!!.setUseFastForwardAction(false)
+    }
+
+    val notificationListener = object : NotificationListener {
+        override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
+            super.onNotificationCancelled(notificationId, dismissedByUser)
+            stopForeground(true)
+            if (exoPlayer?.isPlaying == true) {
+                exoPlayer?.pause()
+            }
+        }
+
+        override fun onNotificationPosted(
+            notificationId: Int,
+            notification: Notification,
+            ongoing: Boolean
+        ) {
+            super.onNotificationPosted(notificationId, notification, ongoing)
+            startForeground(notificationId, notification)
+        }
+    }
+
+    val descriptionAdapter = object : MediaDescriptionAdapter {
+        override fun getCurrentContentTitle(player: Player): CharSequence {
+            return player.currentMediaItem?.mediaMetadata?.title ?: "Unknown Title"
+        }
+
+        override fun createCurrentContentIntent(player: Player): PendingIntent? {
+
+            val openAppIntent = Intent(applicationContext, MainActivity::class.java)
+            return PendingIntent.getActivity(applicationContext, 100, openAppIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        override fun getCurrentContentText(player: Player): CharSequence? {
+            TODO("Not yet implemented")
+        }
+
+        override fun getCurrentLargeIcon(
+            player: Player,
+            callback: PlayerNotificationManager.BitmapCallback
+        ): Bitmap? {
+            val imageView = ImageView(applicationContext)
+            imageView.setImageURI(exoPlayer?.currentMediaItem?.mediaMetadata?.artworkUri ?: Uri.EMPTY)
+
+            var bd = imageView.drawable as BitmapDrawable?
+            if (null == bd) {
+                bd = ContextCompat.getDrawable(applicationContext, R.drawable.ic_launcher_foreground) as BitmapDrawable
+            }
+
+            return bd.bitmap
+//            return null
+        }
+
+    }
+
+    override fun onDestroy() {
+        if (exoPlayer?.isPlaying == true) {
+            exoPlayer?.stop()
+        }
+
+        playerNotificationManager?.setPlayer(null)
+        exoPlayer?.release()
+        exoPlayer = null
+
+        stopForeground(true)
+        stopSelf()
+
+        super.onDestroy()
     }
 }

@@ -93,12 +93,12 @@ class AllSongsFragment: Fragment() {
         PlayerBottomSheetFragment.playCurrentSong(activity?.supportFragmentManager)
 //        DefaultPlayerBottomSheet.show(audio, activity?.supportFragmentManager)
 
-        binding.miniPlayer.setOnClickListener {
-            // TODO: Swipe to remove, normal click should open the detail player view
-            showMiniPlayer(false)
-        }
+//        binding.miniPlayer.setOnClickListener {
+//            // TODO: Swipe to remove, normal click should open the detail player view
+//            showMiniPlayer(false)
+//        }
 
-        showMiniPlayer(true)
+        showMiniPlayer(false)
     }
 
     private fun showMiniPlayer(show: Boolean) {
